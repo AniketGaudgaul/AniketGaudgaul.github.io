@@ -35,14 +35,14 @@ $(document).ready(function(){
 
     // typing text animation script
     var typed = new Typed(".typing", {
-        strings: ["Web Developer", "AI-ML enthusiast","Mentor at Virtual Labs", "Winner of Hackathon 2K21", "Astronomer"],
+        strings: ["AI-ML & Data Science Practitioner", "Research Intern at IIT-Patna", "Web Developer", "Winner of Hackathon 2K21", "Astrophile"],
         typeSpeed: 100,
         backSpeed: 60,
         loop: true
     });
 
     var typed = new Typed(".typing-2", {
-        strings: ["Web Developer", "AI-ML enthusiast","Mentor at Virtual Labs", "Winner of Hackathon 2K21", "Astronomer"],
+        strings: ["AI-ML & Data Science Practitioner", "Research Intern at IIT-Patna", "Web Developer", "Winner of Hackathon 2K21", "Astrophile"],
         typeSpeed: 100,
         backSpeed: 60,
         loop: true
