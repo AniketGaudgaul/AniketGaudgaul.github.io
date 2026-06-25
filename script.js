@@ -1,73 +1,70 @@
-$(document).ready(function(){
-    $(window).scroll(function(){
-        // sticky navbar on scroll script
-        if(this.scrollY > 20){
-            $('.navbar').addClass("sticky");
-        }else{
-            $('.navbar').removeClass("sticky");
+/* =========================================================================
+   EDIT YOUR LINKS HERE  ↓↓↓
+   Replace the placeholder URLs below with your real ones, then save.
+   This is the ONLY place you need to change links.
+   ========================================================================= */
+const CONFIG = {
+  resumeUrl:   "https://drive.google.com/file/d/1FLaC5WCRyrO2Wa4ppScTya4XZVycgbAJ/view?usp=sharing",                                        // ← your Google Drive resume share link
+  githubUrl:   "https://github.com/AniketGaudgaul",         // ← your GitHub profile
+  linkedinUrl: "https://www.linkedin.com/in/aniket-gaudgaul-689542213/",      // ← your LinkedIn profile
+  paperUrl:    "https://arxiv.org/abs/2401.01596",                                        // ← link to your research paper (arXiv / DOI / PDF)
+  paperCode:   "#",                                        // ← repo/code for the paper (or remove the button)
+};
+/* ========================================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Wire up configurable links ---
+  const apply = (selector, url, { newTab = false } = {}) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      el.setAttribute("href", url);
+      if (newTab && url !== "#") {
+        el.setAttribute("target", "_blank");
+        el.setAttribute("rel", "noopener");
+      }
+    });
+  };
+
+  apply("[data-resume]", CONFIG.resumeUrl, { newTab: true });
+  apply("[data-github]", CONFIG.githubUrl, { newTab: true });
+  apply("[data-linkedin]", CONFIG.linkedinUrl, { newTab: true });
+  apply("[data-paper]", CONFIG.paperUrl, { newTab: true });
+  apply("[data-paper-code]", CONFIG.paperCode, { newTab: true });
+
+  // Update visible GitHub/LinkedIn handles from the URLs
+  const ghHandle = CONFIG.githubUrl.replace(/\/$/, "").split("/").pop();
+  const liHandle = CONFIG.linkedinUrl.replace(/\/$/, "").split("/in/").pop();
+  document.querySelectorAll("[data-github] span:last-child").forEach((el) => {
+    el.innerHTML = `<strong>GitHub</strong>@${ghHandle}`;
+  });
+  document.querySelectorAll("[data-linkedin] span:last-child").forEach((el) => {
+    el.innerHTML = `<strong>LinkedIn</strong>/in/${liHandle}`;
+  });
+
+  // --- Mobile nav toggle ---
+  const toggle = document.querySelector(".nav-toggle");
+  const links = document.querySelector(".nav-links");
+  toggle?.addEventListener("click", () => links.classList.toggle("open"));
+  links?.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => links.classList.remove("open"))
+  );
+
+  // --- Scroll reveal ---
+  const revealEls = document.querySelectorAll(".section");
+  revealEls.forEach((el) => el.classList.add("reveal"));
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          io.unobserve(entry.target);
         }
-        
-        // scroll-up button show/hide script
-        if(this.scrollY > 500){
-            $('.scroll-up-btn').addClass("show");
-        }else{
-            $('.scroll-up-btn').removeClass("show");
-        }
-    });
+      });
+    },
+    { threshold: 0.12 }
+  );
+  revealEls.forEach((el) => io.observe(el));
 
-    // slide-up script
-    $('.scroll-up-btn').click(function(){
-        $('html').animate({scrollTop: 0});
-        // removing smooth scroll on slide-up button click
-        $('html').css("scrollBehavior", "auto");
-    });
-
-    $('.navbar .menu li a').click(function(){
-        // applying again smooth scroll on menu items click
-        $('html').css("scrollBehavior", "smooth");
-    });
-
-    // toggle menu/navbar script
-    $('.menu-btn').click(function(){
-        $('.navbar .menu').toggleClass("active");
-        $('.menu-btn i').toggleClass("active");
-    });
-
-    // typing text animation script
-    var typed = new Typed(".typing", {
-        strings: ["AI-ML & Data Science Practitioner", "Research Intern at IIT-Patna", "Web Developer", "Winner of Hackathon 2K21", "Astrophile"],
-        typeSpeed: 100,
-        backSpeed: 60,
-        loop: true
-    });
-
-    var typed = new Typed(".typing-2", {
-        strings: ["AI-ML & Data Science Practitioner", "Research Intern at IIT-Patna", "Web Developer", "Winner of Hackathon 2K21", "Astrophile"],
-        typeSpeed: 100,
-        backSpeed: 60,
-        loop: true
-    });
-
-    // owl carousel script
-    $('.carousel').owlCarousel({
-        margin: 20,
-        loop: true,
-        autoplay: true,
-        autoplayTimeOut: 2000,
-        autoplayHoverPause: true,
-        responsive: {
-            0:{
-                items: 1,
-                nav: false
-            },
-            600:{
-                items: 2,
-                nav: false
-            },
-            1000:{
-                items: 3,
-                nav: false
-            }
-        }
-    });
+  // --- Footer year ---
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
