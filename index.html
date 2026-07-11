@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Aniket Gaudgaul — AI Engineer specializing in LLMs, RAG, and intelligent agent systems." />
   <meta name="author" content="Aniket Gaudgaul" />
+  <meta name="theme-color" content="#f1ece1" />
   <title>Aniket Gaudgaul — AI Engineer</title>
 
   <meta property="og:title" content="Aniket Gaudgaul — AI Engineer" />
@@ -13,19 +14,46 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="icon" href="favicon.jpg" />
-
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Animation stack -->
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script defer src="script.js"></script>
+
+  <noscript>
+    <style>.preloader, .cursor-dot, .cursor-ring, #ink { display: none !important; }</style>
+  </noscript>
 </head>
 <body>
-  <!-- Soft background accents -->
+  <!-- Preloader -->
+  <div class="preloader" aria-hidden="true">
+    <p class="pre-name">Aniket Gaudgaul — Portfolio</p>
+    <div class="pre-count"><span id="preNum">00</span><span class="pre-pct">%</span></div>
+    <div class="pre-bar"><span></span></div>
+  </div>
+
+  <!-- Interactive ink field -->
+  <canvas id="ink" aria-hidden="true"></canvas>
+
+  <!-- Soft background accents + paper grain -->
   <div class="bg-accents" aria-hidden="true">
     <span class="accent accent-1"></span>
     <span class="accent accent-2"></span>
     <span class="grid-overlay"></span>
   </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
   <!-- Navbar -->
   <header class="nav-wrap">
@@ -39,7 +67,7 @@
         <li><a href="#stack">Stack</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#research">Research</a></li>
-        <li><a href="#projects">Projects</a></li>
+        <li><a href="#agent">Ask My AI</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="#" class="nav-resume" data-resume>Resume</a></li>
       </ul>
@@ -49,12 +77,14 @@
   <main>
     <!-- Hero -->
     <section id="home" class="hero">
-      <div class="hero-inner">
+      <div class="hero-ghost" aria-hidden="true">INTELLIGENCE</div>
+      <div class="container hero-inner">
         <p class="hero-eyebrow"><span class="status-dot"></span>Available for AI/ML roles</p>
         <h1 class="hero-title">
-          Hi, I'm <span class="grad-text">Aniket Gaudgaul</span>
+          <span class="line">Aniket</span>
+          <span class="line"><em>Gaudgaul</em></span>
         </h1>
-        <h2 class="hero-subtitle">AI Engineer</h2>
+        <h2 class="hero-subtitle"><span id="typed">AI Engineer</span><span class="type-caret" aria-hidden="true"></span></h2>
         <p class="hero-tagline">
           I build intelligent systems with <strong>LLMs</strong>, <strong>RAG pipelines</strong>,
           and <strong>autonomous agents</strong> — turning frontier models into reliable, production-grade products.
@@ -67,33 +97,69 @@
           </a>
         </div>
         <div class="hero-stats">
-          <div class="stat"><span class="stat-num">2+</span><span class="stat-label">Years Experience</span></div>
+          <div class="stat"><span class="stat-num" data-count="2" data-suffix="+">2+</span><span class="stat-label">Years Experience</span></div>
           <div class="stat-divider"></div>
           <div class="stat"><span class="stat-num">LLM</span><span class="stat-label">RAG &amp; Agents</span></div>
           <div class="stat-divider"></div>
-          <div class="stat"><span class="stat-num">1</span><span class="stat-label">Research Paper</span></div>
+          <div class="stat"><span class="stat-num" data-count="1">1</span><span class="stat-label">Research Paper</span></div>
         </div>
       </div>
+
+      <div class="hero-badge" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="badgeCircle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+          </defs>
+          <text>
+            <textPath href="#badgeCircle">AI ENGINEER ✦ LLM SYSTEMS ✦ RAG ✦ AGENTS ✦ </textPath>
+          </text>
+        </svg>
+        <span class="badge-star">✦</span>
+      </div>
+
+      <a href="#about" class="scroll-hint" aria-label="Scroll to About section">
+        <span>scroll</span>
+        <span class="scroll-line"></span>
+      </a>
     </section>
+
+    <!-- Marquee band -->
+    <div class="marquee-band" aria-hidden="true">
+      <div class="m-row m-row-1">
+        <span>AI Engineer</span><span class="m-sep">✦</span>
+        <span><em>LLM Systems</em></span><span class="m-sep">✦</span>
+        <span>RAG Pipelines</span><span class="m-sep">✦</span>
+        <span><em>Autonomous Agents</em></span><span class="m-sep">✦</span>
+      </div>
+      <div class="m-row m-row-2">
+        <span>Python</span><span class="m-sep">✦</span>
+        <span>PyTorch</span><span class="m-sep">✦</span>
+        <span>LangGraph</span><span class="m-sep">✦</span>
+        <span>Vector Search</span><span class="m-sep">✦</span>
+        <span>FastAPI</span><span class="m-sep">✦</span>
+        <span>MCP</span><span class="m-sep">✦</span>
+        <span>AWS</span><span class="m-sep">✦</span>
+        <span>Docker</span><span class="m-sep">✦</span>
+      </div>
+    </div>
 
     <!-- About -->
     <section id="about" class="section">
-      <div class="section-head">
-        <span class="section-index">01</span>
-        <h2 class="section-title">About</h2>
-      </div>
-      <div class="about-grid">
-        <div class="card about-card">
-          <p>
-            I'm an <strong>AI Engineer</strong> with 2+ years of experience designing and shipping
-            applied machine-learning systems. My focus is the <strong>generative-AI stack</strong> —
-            retrieval-augmented generation, multi-agent orchestration, and getting large language
-            models to behave reliably in the real world.
+      <span class="section-ghost" aria-hidden="true">01</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">01</span>
+          <h2 class="section-title">About</h2>
+        </div>
+        <div class="about-ledes">
+          <p class="about-lede">
+            I design and ship <em>applied AI systems</em> — retrieval-augmented generation,
+            multi-agent orchestration, and large language models that behave reliably
+            in the real world.
           </p>
-          <p>
-            I care about the full lifecycle: from prompt and retrieval design, to evaluation and
-            guardrails, to deployment and monitoring. I enjoy taking ambiguous problems and turning
-            them into measurable, dependable AI products.
+          <p class="about-lede">
+            From prompt &amp; retrieval design to evals, guardrails, deployment and monitoring —
+            I turn ambiguous problems into <em>measurable, dependable products</em>.
           </p>
         </div>
         <div class="about-side">
@@ -107,18 +173,28 @@
             <h3>Agentic Systems</h3>
             <p>Multi-agent workflows with LangGraph &amp; AutoGen.</p>
           </div>
+          <div class="card mini-card">
+            <span class="mini-icon">📄</span>
+            <h3>Applied Research</h3>
+            <p>Multimodal LLM research, published at ECIR 2024.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- What I Work With -->
-    <section id="stack" class="section">
-      <div class="section-head">
-        <span class="section-index">02</span>
-        <h2 class="section-title">What I Work With</h2>
+    <!-- What I Work With — horizontal scroll -->
+    <section id="stack" class="section stack-section">
+      <span class="section-ghost" aria-hidden="true">02</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">02</span>
+          <h2 class="section-title">What I Work With</h2>
+        </div>
+        <div class="stack-progress" aria-hidden="true"><span></span></div>
       </div>
-      <div class="stack-grid">
+      <div class="stack-track">
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">01</span>
           <div class="stack-card-head">
             <span class="stack-emoji">💬</span>
             <h3>LLMs &amp; GenAI</h3>
@@ -134,6 +210,7 @@
         </div>
 
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">02</span>
           <div class="stack-card-head">
             <span class="stack-emoji">🔍</span>
             <h3>RAG &amp; Retrieval</h3>
@@ -148,6 +225,7 @@
         </div>
 
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">03</span>
           <div class="stack-card-head">
             <span class="stack-emoji">🕸️</span>
             <h3>Agents &amp; Frameworks</h3>
@@ -164,6 +242,7 @@
         </div>
 
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">04</span>
           <div class="stack-card-head">
             <span class="stack-emoji">🗄️</span>
             <h3>Vector &amp; Databases</h3>
@@ -179,6 +258,7 @@
         </div>
 
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">05</span>
           <div class="stack-card-head">
             <span class="stack-emoji">🐍</span>
             <h3>Languages &amp; ML</h3>
@@ -194,6 +274,7 @@
         </div>
 
         <div class="card stack-card">
+          <span class="stack-num" aria-hidden="true">06</span>
           <div class="stack-card-head">
             <span class="stack-emoji">⚙️</span>
             <h3>MLOps &amp; Cloud</h3>
@@ -212,177 +293,236 @@
 
     <!-- Experience -->
     <section id="experience" class="section">
-      <div class="section-head">
-        <span class="section-index">03</span>
-        <h2 class="section-title">Experience</h2>
+      <span class="section-ghost" aria-hidden="true">03</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">03</span>
+          <h2 class="section-title">Experience</h2>
+        </div>
+        <div class="timeline">
+          <span class="timeline-line" aria-hidden="true"></span>
+
+          <!-- EDMO — current -->
+          <div class="timeline-item">
+            <div class="timeline-dot current"></div>
+            <div class="card timeline-card">
+              <span class="timeline-date">JUNE 2026 — Present · Pune, India</span>
+              <h3 class="timeline-role">Machine Learning Engineer</h3>
+              <p class="timeline-company">EDMO<span class="exp-type">Full-time</span></p>
+              <p>
+                Building the <strong>Conversation Intelligence</strong> layer for
+                universities - student and advisor copilots for admissions. Working across the full
+                <strong>STT → LLM → TTS</strong> voice stack with knowledge-base integration to deliver
+                reliable, real-time conversational AI.
+              </p>
+              <div class="tags">
+                <span class="tag">STT / TTS</span>
+                <span class="tag">LLMs</span>
+                <span class="tag">Conversational AI</span>
+                <span class="tag">Knowledge Base</span>
+                <span class="tag">RAG</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yarnit -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="card timeline-card">
+              <span class="timeline-date">Aug 2024 — May 2026 · Bengaluru, India</span>
+              <h3 class="timeline-role">Generative AI Engineer</h3>
+              <p class="timeline-company">Yarnit<span class="exp-type">Full-time</span></p>
+              <ul class="exp-list">
+                <li>Designed and deployed <strong>multi-agent pipelines</strong> integrating LLMs with retrieval systems, structured data, and external tools.</li>
+                <li>Built scalable <strong>RAG architectures</strong> using hybrid retrieval, vector databases, and complex document processing.</li>
+                <li>Engineered reliable workflows enabling LLMs to reason over structured enterprise datasets — focused on robust, low-latency, production-ready systems.</li>
+              </ul>
+              <div class="tags">
+                <span class="tag">Multi-Agent</span>
+                <span class="tag">RAG</span>
+                <span class="tag">Vector DBs</span>
+                <span class="tag">Hybrid Retrieval</span>
+                <span class="tag">Production</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AlgoAnalytics -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="card timeline-card">
+              <span class="timeline-date">Feb 2024 — Jun 2024 · Pune, India</span>
+              <h3 class="timeline-role">Data Science Intern</h3>
+              <p class="timeline-company">AlgoAnalytics<span class="exp-type">Internship</span></p>
+              <ul class="exp-list">
+                <li>Evaluated and optimized LangChain &amp; LlamaIndex RAG and agent applications using the <strong>RAGAS</strong> framework — assessing context appropriateness, answer relevancy, and faithfulness.</li>
+                <li>Migrated a GPT-3.5 agent to <strong>LLaMA-3-8B-Instruct</strong> on Anyscale endpoints, cutting API costs by <strong>70%</strong> while optimizing RAG, SQL retrieval, and SerpAPI integration.</li>
+                <li>Monitored LLM calls and costs with LangSmith; deployed to production with Docker.</li>
+              </ul>
+              <div class="tags">
+                <span class="tag">RAG</span>
+                <span class="tag">RAGAS</span>
+                <span class="tag">LangChain</span>
+                <span class="tag">LlamaIndex</span>
+                <span class="tag">LangSmith</span>
+                <span class="tag">Docker</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- IIT Patna -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="card timeline-card">
+              <span class="timeline-date">Apr 2023 — Oct 2023 · Patna, India</span>
+              <h3 class="timeline-role">Research Intern</h3>
+              <p class="timeline-company">Indian Institute of Technology, Patna<span class="exp-type">Internship</span></p>
+              <ul class="exp-list">
+                <li>Co-developed <strong>MedSumm</strong>, a multimodal framework for code-mixed Hindi-English medical query summarization, integrating text and visual cues — improving summarization quality by <strong>15–20%</strong>.</li>
+                <li>Built the <strong>MMCQS dataset</strong> (3,000+ Hindi-English data points) to address language diversity in clinical queries.</li>
+                <li>Applied <strong>QLoRA</strong> to fine-tune LLMs/VLMs for domain-specific tasks in a resource-constrained setting. Work published at <strong>ECIR 2024</strong>.</li>
+              </ul>
+              <div class="tags">
+                <span class="tag">Multimodal</span>
+                <span class="tag">QLoRA</span>
+                <span class="tag">LLM Fine-tuning</span>
+                <span class="tag">Research</span>
+                <span class="tag">ECIR 2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="section-note">Full details &amp; impact are available in my <a href="#" data-resume>resume →</a></p>
       </div>
-      <div class="timeline">
-        <!-- EDMO — current -->
-        <div class="timeline-item">
-          <div class="timeline-dot current"></div>
-          <div class="card timeline-card">
-            <span class="timeline-date">JUNE 2026 — Present · Pune, India</span>
-            <h3 class="timeline-role">Machine Learning Engineer</h3>
-            <p class="timeline-company">EDMO<span class="exp-type">Full-time</span></p>
-            <p>
-              Building the <strong>Conversation Intelligence</strong> layer for
-              universities - student and advisor copilots for admissions. Working across the full
-              <strong>STT → LLM → TTS</strong> voice stack with knowledge-base integration to deliver
-              reliable, real-time conversational AI.
-            </p>
-            <div class="tags">
-              <span class="tag">STT / TTS</span>
-              <span class="tag">LLMs</span>
-              <span class="tag">Conversational AI</span>
-              <span class="tag">Knowledge Base</span>
-              <span class="tag">RAG</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Yarnit -->
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="card timeline-card">
-            <span class="timeline-date">Aug 2024 — May 2026 · Bengaluru, India</span>
-            <h3 class="timeline-role">Generative AI Engineer</h3>
-            <p class="timeline-company">Yarnit<span class="exp-type">Full-time</span></p>
-            <ul class="exp-list">
-              <li>Designed and deployed <strong>multi-agent pipelines</strong> integrating LLMs with retrieval systems, structured data, and external tools.</li>
-              <li>Built scalable <strong>RAG architectures</strong> using hybrid retrieval, vector databases, and complex document processing.</li>
-              <li>Engineered reliable workflows enabling LLMs to reason over structured enterprise datasets — focused on robust, low-latency, production-ready systems.</li>
-            </ul>
-            <div class="tags">
-              <span class="tag">Multi-Agent</span>
-              <span class="tag">RAG</span>
-              <span class="tag">Vector DBs</span>
-              <span class="tag">Hybrid Retrieval</span>
-              <span class="tag">Production</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- AlgoAnalytics -->
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="card timeline-card">
-            <span class="timeline-date">Feb 2024 — Jun 2024 · Pune, India</span>
-            <h3 class="timeline-role">Data Science Intern</h3>
-            <p class="timeline-company">AlgoAnalytics<span class="exp-type">Internship</span></p>
-            <ul class="exp-list">
-              <li>Evaluated and optimized LangChain &amp; LlamaIndex RAG and agent applications using the <strong>RAGAS</strong> framework — assessing context appropriateness, answer relevancy, and faithfulness.</li>
-              <li>Migrated a GPT-3.5 agent to <strong>LLaMA-3-8B-Instruct</strong> on Anyscale endpoints, cutting API costs by <strong>70%</strong> while optimizing RAG, SQL retrieval, and SerpAPI integration.</li>
-              <li>Monitored LLM calls and costs with LangSmith; deployed to production with Docker.</li>
-            </ul>
-            <div class="tags">
-              <span class="tag">RAG</span>
-              <span class="tag">RAGAS</span>
-              <span class="tag">LangChain</span>
-              <span class="tag">LlamaIndex</span>
-              <span class="tag">LangSmith</span>
-              <span class="tag">Docker</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- IIT Patna -->
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="card timeline-card">
-            <span class="timeline-date">Apr 2023 — Oct 2023 · Patna, India</span>
-            <h3 class="timeline-role">Research Intern</h3>
-            <p class="timeline-company">Indian Institute of Technology, Patna<span class="exp-type">Internship</span></p>
-            <ul class="exp-list">
-              <li>Co-developed <strong>MedSumm</strong>, a multimodal framework for code-mixed Hindi-English medical query summarization, integrating text and visual cues — improving summarization quality by <strong>15–20%</strong>.</li>
-              <li>Built the <strong>MMCQS dataset</strong> (3,000+ Hindi-English data points) to address language diversity in clinical queries.</li>
-              <li>Applied <strong>QLoRA</strong> to fine-tune LLMs/VLMs for domain-specific tasks in a resource-constrained setting. Work published at <strong>ECIR 2024</strong>.</li>
-            </ul>
-            <div class="tags">
-              <span class="tag">Multimodal</span>
-              <span class="tag">QLoRA</span>
-              <span class="tag">LLM Fine-tuning</span>
-              <span class="tag">Research</span>
-              <span class="tag">ECIR 2024</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="section-note">Full details &amp; impact are available in my <a href="#" data-resume>resume →</a></p>
     </section>
 
     <!-- Research -->
     <section id="research" class="section">
-      <div class="section-head">
-        <span class="section-index">04</span>
-        <h2 class="section-title">Research &amp; Publications</h2>
-      </div>
-      <div class="card research-card">
-        <div class="research-badge">📄 Published · ECIR 2024</div>
-        <h3 class="research-title">MedSumm: A Multimodal Approach to Summarizing Code-Mixed Hindi-English Clinical Queries</h3>
-        <p class="research-authors">A. Ghosh, A. Acharya, P. Jha, <strong>A. Gaudgaul</strong>, R. Majumdar, S. Saha, A. Chadha, R. Jain, S. Sinha, S. Agarwal</p>
-        <p class="research-venue">European Conference on Information Retrieval (ECIR) 2024 · arXiv:2401.01596</p>
-        <p class="research-abstract">
-          Introduces multimodal medical question summarization for code-mixed Hindi-English queries in a
-          low-resource setting. We present the <strong>MMCQS dataset</strong> — pairing code-mixed clinical
-          queries with visual aids — and <strong>MedSumm</strong>, a framework leveraging LLMs and VLMs to
-          generate medically detailed summaries. Integrating visual cues yields richer patient
-          representations and measurably better summaries, improving healthcare decision-making.
-        </p>
-        <div class="research-links">
-          <a href="#" class="btn btn-small btn-primary" data-paper>Read on arXiv</a>
+      <span class="section-ghost" aria-hidden="true">04</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">04</span>
+          <h2 class="section-title">Research &amp; Publications</h2>
+        </div>
+        <div class="card research-card">
+          <div class="research-badge">📄 Published · ECIR 2024</div>
+          <h3 class="research-title">MedSumm: A Multimodal Approach to Summarizing Code-Mixed Hindi-English Clinical Queries</h3>
+          <p class="research-authors">A. Ghosh, A. Acharya, P. Jha, <strong>A. Gaudgaul</strong>, R. Majumdar, S. Saha, A. Chadha, R. Jain, S. Sinha, S. Agarwal</p>
+          <p class="research-venue">European Conference on Information Retrieval (ECIR) 2024 · arXiv:2401.01596</p>
+          <p class="research-abstract">
+            Introduces multimodal medical question summarization for code-mixed Hindi-English queries in a
+            low-resource setting. We present the <strong>MMCQS dataset</strong> — pairing code-mixed clinical
+            queries with visual aids — and <strong>MedSumm</strong>, a framework leveraging LLMs and VLMs to
+            generate medically detailed summaries. Integrating visual cues yields richer patient
+            representations and measurably better summaries, improving healthcare decision-making.
+          </p>
+          <div class="research-links">
+            <a href="#" class="btn btn-small btn-primary" data-paper>Read on arXiv</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Projects (placeholder) -->
-    <section id="projects" class="section">
-      <div class="section-head">
-        <span class="section-index">05</span>
-        <h2 class="section-title">Projects</h2>
-      </div>
-      <div class="card projects-placeholder">
-        <span class="ph-icon">🚧</span>
-        <h3>Selected work — coming soon</h3>
-        <p>
-          I'm currently curating a set of anonymized case studies showcasing the AI systems
-          I've built. In the meantime, my full experience is detailed in my resume.
+    <!-- Ask My AI — digital twin chat -->
+    <section id="agent" class="section">
+      <span class="section-ghost" aria-hidden="true">05</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">05</span>
+          <h2 class="section-title">Ask My AI</h2>
+        </div>
+        <p class="agent-intro">
+          Meet my <em>digital twin</em> — an agent grounded in a knowledge base of my career,
+          stack and projects. Ask it anything you'd ask me.
         </p>
-        <a href="#" class="btn btn-primary" data-resume>View Resume</a>
+
+        <div class="card chat-card">
+          <div class="chat-head">
+            <div class="chat-id">
+              <span class="chat-avatar">AG</span>
+              <div class="chat-id-text">
+                <strong>Aniket's Agent</strong>
+                <span class="chat-status"><span class="status-dot"></span>Online — answers on my behalf</span>
+              </div>
+            </div>
+            <span class="chat-tag">RAG · Knowledge Base</span>
+          </div>
+
+          <div class="chat-body" id="chatBody" data-lenis-prevent>
+            <div class="chat-day">— Today —</div>
+          </div>
+
+          <div class="chat-suggests" id="chatSuggests">
+            <span class="suggest-label">Try asking</span>
+          </div>
+
+          <form class="chat-inputbar" id="chatForm" autocomplete="off">
+            <input
+              id="chatInput"
+              type="text"
+              placeholder="Ask about my experience, stack, research…"
+              maxlength="500"
+              aria-label="Ask Aniket's AI agent a question"
+            />
+            <button type="submit" class="chat-send" id="chatSend" aria-label="Send message">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+            </button>
+          </form>
+
+          <p class="chat-note">AI-generated · preview build — responses are canned until the agent backend is connected.</p>
+        </div>
       </div>
     </section>
 
     <!-- Contact -->
     <section id="contact" class="section">
-      <div class="section-head">
-        <span class="section-index">06</span>
-        <h2 class="section-title">Get in Touch</h2>
-      </div>
-      <div class="card contact-card">
-        <h3>Let's build something intelligent.</h3>
-        <p>Open to AI Engineer roles, collaborations, and interesting problems. The fastest way to reach me:</p>
-        <div class="contact-links">
-          <a href="mailto:aniketgaudgaul@gmail.com" class="contact-link">
-            <span class="ci">✉️</span>
-            <span><strong>Email</strong>aniketgaudgaul@gmail.com</span>
-          </a>
-          <a href="https://github.com/your-username" target="_blank" rel="noopener" class="contact-link" data-github>
-            <span class="ci">🐙</span>
-            <span><strong>GitHub</strong>@your-username</span>
-          </a>
-          <a href="https://linkedin.com/in/your-handle" target="_blank" rel="noopener" class="contact-link" data-linkedin>
-            <span class="ci">💼</span>
-            <span><strong>LinkedIn</strong>/in/your-handle</span>
-          </a>
+      <span class="section-ghost" aria-hidden="true">06</span>
+      <div class="container">
+        <div class="section-head">
+          <span class="section-index">06</span>
+          <h2 class="section-title">Get in Touch</h2>
+        </div>
+        <div class="contact-wrap">
+          <h3 class="contact-mega">
+            <span class="cm-mask"><span class="cm-line">Let's build</span></span>
+            <span class="cm-mask"><span class="cm-line"><em>something intelligent.</em></span></span>
+          </h3>
+          <p class="contact-note">Open to AI Engineer roles, collaborations, and interesting problems. The fastest way to reach me:</p>
+          <a class="mega-email" href="mailto:aniketgaudgaul@gmail.com">aniketgaudgaul@gmail.com<span class="arrow">↗</span></a>
+          <div class="contact-links">
+            <a href="https://github.com/AniketGaudgaul" target="_blank" rel="noopener" class="contact-link" data-github>
+              <span class="ci">🐙</span>
+              <span><strong>GitHub</strong>@AniketGaudgaul</span>
+            </a>
+            <a href="https://www.linkedin.com/in/aniket-gaudgaul-689542213/" target="_blank" rel="noopener" class="contact-link" data-linkedin>
+              <span class="ci">💼</span>
+              <span><strong>LinkedIn</strong>/in/aniket-gaudgaul</span>
+            </a>
+            <a href="#" class="contact-link" data-resume>
+              <span class="ci">📑</span>
+              <span><strong>Resume</strong>PDF · Google Drive</span>
+            </a>
+            <button type="button" class="contact-link" data-copy="aniketgaudgaul@gmail.com">
+              <span class="ci">📋</span>
+              <span><strong>Copy Email</strong>to clipboard</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <p>Designed &amp; built by Aniket Gaudgaul · <span id="year"></span></p>
-    <p class="footer-sub">Light theme · Vanilla HTML/CSS/JS · Hosted on GitHub Pages</p>
-  </footer>
+  <button type="button" class="back-to-top" aria-label="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+  <div class="toast" role="status" aria-live="polite">Email copied ✓</div>
 
-  <script src="script.js"></script>
+  <footer class="footer">
+    <div class="container footer-row">
+      <p>Designed &amp; built by Aniket Gaudgaul · <span id="year"></span></p>
+      <p class="footer-time">Pune, IN — <span id="clock">--:--</span> IST</p>
+    </div>
+    <p class="footer-sub">Fraunces · GSAP · Lenis · GitHub Pages</p>
+  </footer>
 </body>
 </html>
