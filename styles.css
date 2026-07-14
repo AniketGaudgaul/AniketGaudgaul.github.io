@@ -324,7 +324,9 @@ html.is-ready .section-title:not(.is-in)::after { width: 0; }
 }
 .hero-title {
   font-family: "Fraunces", serif;
-  font-size: clamp(3.4rem, 11vw, 8.6rem);
+  /* cap by viewport HEIGHT too, so short/landscape laptops don't get a
+     title so tall it overflows the hero and clips behind the navbar */
+  font-size: clamp(3.4rem, min(11vw, 13vh), 8.6rem);
   font-weight: 400;
   line-height: 0.98;
   letter-spacing: -0.03em;
@@ -1240,6 +1242,32 @@ button.contact-link { font: inherit; text-align: left; cursor: pointer; }
   .hero-cta { flex-direction: column; align-items: stretch; }
   .btn { justify-content: center; }
   .contact-link { min-width: 100%; }
+}
+
+/* ===== Short / landscape viewports =====
+   On laptops with limited height (or odd aspect ratios) the centered hero
+   content used to be taller than the viewport, so the title clipped behind
+   the navbar and the stats/scroll hint collided with the marquee band.
+   Tighten the vertical rhythm and reposition the decorations so it fits. */
+@media (max-height: 860px) and (min-width: 821px) {
+  .hero-eyebrow { margin-bottom: 16px; }
+  .hero-subtitle { margin-bottom: 16px; }
+  .hero-tagline { margin-bottom: 24px; }
+  .hero-cta { margin-bottom: 30px; }
+  .hero-stats { padding-top: 18px; }
+  .hero-badge { bottom: auto; top: 22vh; width: 140px; height: 140px; }
+}
+@media (max-height: 720px) {
+  /* anchor content to the top so the title can never hide behind the nav */
+  .hero { align-items: flex-start; padding-top: 92px; }
+  .hero-title { font-size: clamp(2.4rem, 11vh, 4.4rem); }
+  .hero-eyebrow { margin-bottom: 12px; }
+  .hero-subtitle { margin-bottom: 12px; }
+  .hero-tagline { margin-bottom: 18px; }
+  .hero-cta { margin-bottom: 22px; }
+  .hero-stats { padding-top: 14px; }
+  .hero-badge { display: none; }
+  .scroll-hint { display: none; }
 }
 
 /* ===== Reduced motion / no-anim safety net ===== */
