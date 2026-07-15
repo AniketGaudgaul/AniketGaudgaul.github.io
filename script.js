@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       },
       {
-        q: "Is he open to new roles?",
+        q: "How did he built this chat agent?",
         match: /role|open|hire|hiring|job|available|contact|reach/i,
         a: {
           text: "Yes — he's open to <strong>AI Engineer roles</strong>, collaborations and interesting problems. The fastest way to reach the human is <a href='mailto:aniketgaudgaul@gmail.com'>aniketgaudgaul@gmail.com</a>.",
@@ -283,8 +283,31 @@ document.addEventListener("DOMContentLoaded", () => {
       const lines = String(src || "").replace(/\r\n/g, "\n").split("\n");
       const out = [];
       let list = null; // 'ul' | 'ol'
+      let code = null; // { lang, buf } while inside a ``` fenced block
       const closeList = () => { if (list) { out.push(`</${list}>`); list = null; } };
+      const flushCode = () => {
+        if (!code) return;
+        const body = escapeHtml(code.buf.join("\n"));
+        if (/^mermaid$/i.test(code.lang)) {
+          // Left as source here; upgraded to an SVG diagram after the reply
+          // finishes streaming — see renderMermaid().
+          out.push(`<pre class="mermaid" data-mermaid="1">${body}</pre>`);
+        } else {
+          const cls = code.lang ? ` class="lang-${code.lang.toLowerCase()}"` : "";
+          out.push(`<pre class="code-block"><code${cls}>${body}</code></pre>`);
+        }
+        code = null;
+      };
       for (const raw of lines) {
+        // Fenced code blocks (```lang … ```). Opening captures the language;
+        // any line inside is kept verbatim so diagrams/code aren't mangled.
+        const fence = raw.match(/^\s*```+\s*([\w+-]*)\s*$/);
+        if (fence) {
+          if (code) flushCode();                                   // closing fence
+          else { closeList(); code = { lang: fence[1] || "", buf: [] }; } // opening fence
+          continue;
+        }
+        if (code) { code.buf.push(raw); continue; }
         const line = raw.trimEnd();
         if (!line.trim()) { closeList(); continue; }
         let m;
@@ -303,6 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
       closeList();
+      flushCode(); // emit an unterminated fence rather than dropping it
       return out.join("");
     };
 
@@ -525,6 +549,48 @@ document.addEventListener("DOMContentLoaded", () => {
       if (reply.images?.length || cites.length) scrollToEnd();
     };
 
+    // Mermaid diagrams: the library is large, so it's loaded lazily the first
+    // time a reply actually contains a ```mermaid block. Rendered with the
+    // strict security level since the source comes from the (untrusted) LLM.
+    let mermaidReady = null;
+    const loadMermaid = () => {
+      if (!mermaidReady) {
+        mermaidReady = import(
+          "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+        ).then((m) => {
+          const mermaid = m.default;
+          mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "neutral" });
+          return mermaid;
+        });
+      }
+      return mermaidReady;
+    };
+    const renderMermaid = async (bubble) => {
+      const blocks = bubble.querySelectorAll("pre.mermaid[data-mermaid]");
+      if (!blocks.length) return;
+      let mermaid;
+      try {
+        mermaid = await loadMermaid();
+      } catch {
+        return; // library failed to load — leave the source blocks as-is
+      }
+      let i = 0;
+      for (const pre of blocks) {
+        const src = pre.textContent; // entities decode back to real -->, [ ], | etc.
+        const id = "mmd-" + Date.now().toString(36) + "-" + i++;
+        try {
+          const { svg } = await mermaid.render(id, src);
+          const fig = document.createElement("figure");
+          fig.className = "msg-figure msg-diagram";
+          fig.innerHTML = svg;
+          pre.replaceWith(fig);
+          scrollToEnd();
+        } catch {
+          pre.removeAttribute("data-mermaid"); // keep the source as a plain code block
+        }
+      }
+    };
+
     let busy = false;
     const send = async (text) => {
       const message = (text || "").trim();
@@ -545,6 +611,7 @@ document.addEventListener("DOMContentLoaded", () => {
       typingBubble.innerHTML = "";
       await streamInto(typingBubble, reply.text);
       renderExtras(typingBubble, reply);
+      renderMermaid(typingBubble); // upgrade any ```mermaid blocks to SVG diagrams
       // Record the turn so the router can resolve follow-ups ("yes, go deeper").
       if (reply._history !== undefined) {
         history.push({ role: "user", content: message });

@@ -885,6 +885,37 @@ html.no-anim .m-row-2 { animation-direction: reverse; }
   border-top: 1px solid var(--border);
 }
 
+/* Rendered mermaid diagrams — an SVG, not a zoomable photo */
+.msg-diagram {
+  cursor: default;
+  max-width: 100%;
+  padding: 14px;
+  overflow-x: auto;
+}
+.msg-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+
+/* Fenced code blocks, incl. mermaid source before/if it can't be rendered */
+.msg-bubble pre.code-block,
+.msg-bubble pre.mermaid {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  overflow-x: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8em;
+  line-height: 1.5;
+  white-space: pre;
+}
+.msg-bubble pre.code-block code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+.msg-bubble pre.mermaid[data-mermaid] { color: var(--text-faint); } /* not yet rendered */
+
 /* Citations under agent replies */
 .msg-cites { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .cites-label {
