@@ -396,15 +396,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const hit = SUGGESTIONS.find((s) => s.match.test(message));
         return hit ? hit.a : FALLBACK;
       }
-      const res = await fetch(CONFIG.agentApi.replace(/\/+$/, "") + "/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: message,
-          history: history.slice(-8),
-          session_id: session,
-        }),
-      });
+      // Fail fast instead of hanging: on networks that can't reach the API the
+      // browser can stall for a long time, so cap it and surface a clean message.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 20000);
+      let res;
+      try {
+        res = await fetch(CONFIG.agentApi.replace(/\/+$/, "") + "/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: message,
+            history: history.slice(-8),
+            session_id: session,
+          }),
+          signal: ctrl.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
       if (!res.ok) throw new Error("agent unavailable (" + res.status + ")");
       return adaptReply(await res.json());
     };
@@ -605,7 +615,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reply = normalizeReply(await askAgent(message));
       } catch {
         reply = {
-          text: "Hmm, I couldn't reach my brain just now — please try again in a moment, or email <a href='mailto:aniketgaudgaul@gmail.com'>aniketgaudgaul@gmail.com</a>.",
+          text: "This assistant is still under development and isn't fully live yet. In the meantime, reach me directly at <a href='mailto:aniketgaudgaul@gmail.com'>aniketgaudgaul@gmail.com</a>.",
         };
       }
       typingBubble.innerHTML = "";

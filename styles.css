@@ -756,6 +756,38 @@ html.no-anim .m-row-2 { animation-direction: reverse; }
   white-space: nowrap;
 }
 
+/* "In development" state — amber dot + caution banner (temporary, while the
+   public endpoint's reachability is being sorted). Remove both to go fully live. */
+.chat-status.is-dev .status-dot {
+  background: #e0a534;
+  animation: none;
+  box-shadow: 0 0 0 3px rgba(224, 165, 52, 0.18);
+}
+.chat-devbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 0 22px 6px;
+  padding: 9px 13px;
+  border: 1px solid #e7d3a6;
+  background: #fbf3e0;
+  border-radius: 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: #8a6d1f;
+}
+.chat-devbar a { color: #8a6d1f; text-decoration: underline; }
+.chat-devbar-dot {
+  flex: none;
+  margin-top: 3px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #e0a534;
+  box-shadow: 0 0 0 3px rgba(224, 165, 52, 0.18);
+}
+
 /* Messages */
 .chat-body {
   height: 430px;
@@ -1126,6 +1158,7 @@ body.cursor-on .chat-inputbar input { cursor: text; }
 
 @media (max-width: 640px) {
   .chat-tag { display: none; }
+  .chat-devbar { margin-left: 16px; margin-right: 16px; }
   .chat-body { height: 380px; padding: 16px; }
   .msg { max-width: 92%; }
   .chat-suggests, .chat-inputbar { padding-left: 16px; padding-right: 16px; }
