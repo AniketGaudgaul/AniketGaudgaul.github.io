@@ -9,9 +9,9 @@ const CONFIG = {
   linkedinUrl: "https://www.linkedin.com/in/aniket-gaudgaul-689542213/",
   paperUrl:    "https://arxiv.org/abs/2401.01596",
   paperCode:   "#",
-  // The deployed RAG agent (FastAPI on Railway). Empty string → widget stays in
-  // its built-in demo/mock mode (no network calls).
-  agentApi:    "https://ai-avataar-production.up.railway.app",
+  // The deployed RAG agent (FastAPI on Cloud Run, asia-south1). Empty string →
+  // widget stays in its built-in demo/mock mode (no network calls).
+  agentApi:    "https://ai-avatar-674777075083.asia-south1.run.app",
 };
 /* ========================================================================= */
 
